@@ -98,3 +98,6 @@ df_processed = spark_df[['id',
                         'avg_amount_loans_previous', 
                         'flag_own_car']].toPandas()
 df_processed.to_csv(LOCAL_TRAINED_PATH)
+REMOTE_TRAINED_PATH = 'processed_data/trained_model.csv'
+# store on s3
+s3.meta.client.upload_file(LOCAL_TRAINED_PATH, BUCKET_STORAGE, REMOTE_TRAINED_PATH)
