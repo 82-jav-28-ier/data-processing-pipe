@@ -63,8 +63,7 @@ spark_df = spark_df.drop(
  'flag_phone',
  'flag_email',
  'occupation_type',
- 'cnt_fam_members',
- 'status')
+ 'cnt_fam_members')
 
 print('Generating feature nb_previous_loans')
 # Feature nb_previous_loans
