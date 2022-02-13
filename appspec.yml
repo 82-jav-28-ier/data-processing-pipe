@@ -1,0 +1,10 @@
+version: 0.0
+os: linux
+files:
+ - source: .
+   destination: /home/ubuntu/repos/data-processing-pipe
+hooks:
+  AfterInstall:
+   - location: scripts/install_app_dependencies
+     timeout: 300
+     runas: root
