@@ -22,7 +22,7 @@ except ValueError:
 print('Downloading file')
 LOCAL_BASE_PATH = '/home/ubuntu/repos/data-processing-pipe/resources'
 LOCAL_TRAINED_PATH = os.path.join(LOCAL_BASE_PATH,
-                                  'data_trained_for_model.csv')
+                                  'data_trained_for_model.parquet')
 LOCAL_PATH = os.path.join(LOCAL_BASE_PATH,
                           'dataset_credit_risk.csv')
 REMOTE_PATH = 'raw-data/dataset_credit_risk.csv'
@@ -97,7 +97,8 @@ df_processed = spark_df[['id',
                         'nb_previous_loans', 
                         'avg_amount_loans_previous', 
                         'flag_own_car']].toPandas()
-df_processed.to_csv(LOCAL_TRAINED_PATH)
-REMOTE_TRAINED_PATH = 'processed_data/trained_model.csv'
+# df_processed.to_csv(LOCAL_TRAINED_PATH)
+df_processed.to_parquet(LOCAL_TRAINED_PATH)
+REMOTE_TRAINED_PATH = 'processed_data/trained_model.parquet'
 # store on s3
 s3.meta.client.upload_file(LOCAL_TRAINED_PATH, BUCKET_STORAGE, REMOTE_TRAINED_PATH)
