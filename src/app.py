@@ -1,4 +1,5 @@
-import os
+import sys, math
+from os import path, getenv
 
 import boto3
 import pandas as pd
@@ -6,6 +7,13 @@ from pyspark import SparkContext
 from pyspark.sql import SparkSession
 from pyspark.sql import functions as F
 from pyspark.sql.window import Window
+
+
+
+
+LOCAL_BASE_PATH = getenv('BASE_PATH')
+REMOTE_PATH = getenv('REMOTE_DATA_PATH')
+BUCKET_STORAGE = getenv('BUCKET_STORAGE')
 
 
 try:
@@ -18,15 +26,12 @@ try:
 except ValueError:
     print('SparkSession already exists!')
 
-# Replace with env vars
+
 print('Downloading file')
-LOCAL_BASE_PATH = '/home/ubuntu/repos/data-processing-pipe/resources'
-LOCAL_TRAINED_PATH = os.path.join(LOCAL_BASE_PATH,
+LOCAL_TRAINED_PATH = path.join(LOCAL_BASE_PATH,
                                   'data_trained_for_model.parquet')
-LOCAL_PATH = os.path.join(LOCAL_BASE_PATH,
+LOCAL_PATH = path.join(LOCAL_BASE_PATH,
                           'dataset_credit_risk.csv')
-REMOTE_PATH = 'raw-data/dataset_credit_risk.csv'
-BUCKET_STORAGE = 'kueski-test-storage'
 s3 = boto3.resource('s3')
 s3.Object(BUCKET_STORAGE, REMOTE_PATH).download_file(LOCAL_PATH)
 print('File downloaded')
@@ -35,7 +40,7 @@ with open(LOCAL_PATH) as f:
     data = f.readlines()
 data.__len__()
 
-import sys, math
+
 n_slices = math.ceil(sys.getsizeof(data) / 81920)
 n_slices
 print('Creating spark rdd')
