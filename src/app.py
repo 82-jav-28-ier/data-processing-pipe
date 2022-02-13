@@ -14,7 +14,7 @@ from pyspark.sql.window import Window
 LOCAL_BASE_PATH = getenv('BASE_PATH')
 REMOTE_PATH = getenv('REMOTE_DATA_PATH')
 BUCKET_STORAGE = getenv('BUCKET_STORAGE')
-
+REMOTE_TRAINED_PATH = getenv('REMOTE_TRAINED_PATH')
 
 try:
     sc = SparkContext('local', 'Pyspark demo')
@@ -101,9 +101,10 @@ df_processed = spark_df[['id',
                         'years_on_the_job', 
                         'nb_previous_loans', 
                         'avg_amount_loans_previous', 
-                        'flag_own_car']].toPandas()
+                        'flag_own_car',
+                        'status']].toPandas()
 # df_processed.to_csv(LOCAL_TRAINED_PATH)
 df_processed.to_parquet(LOCAL_TRAINED_PATH)
-REMOTE_TRAINED_PATH = 'processed_data/trained_model.parquet'
+
 # store on s3
 s3.meta.client.upload_file(LOCAL_TRAINED_PATH, BUCKET_STORAGE, REMOTE_TRAINED_PATH)
